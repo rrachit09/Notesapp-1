@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notes App</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+</head>
+<body>
+  <div class="page-shell">
+    <header class="app-header">
+      <div>
+        <h1>Notes</h1>
+        <p>Capture thoughts, todos, and ideas in one place.</p>
+      </div>
+    </header>
+
+    <main class="content-grid">
+      <section class="note-form-card">
+        <h2>Add a Note</h2>
+        <form action="{{ url_for('add_note') }}" method="post" class="note-form">
+          <label for="title">Title</label>
+          <input type="text" id="title" name="title" placeholder="Give your note a title" required />
+
+          <label for="content">Note</label>
+          <textarea id="content" name="content" rows="5" placeholder="Write your note here" required></textarea>
+
+          <button type="submit">Save Note</button>
+        </form>
+      </section>
+
+      <section class="notes-panel">
+        <div class="panel-header">
+          <h2>Your Notes</h2>
+          <span class="note-count">{{ notes|length }} total</span>
+        </div>
+
+        {% if notes %}
+          <ul class="notes-list">
+            {% for note in notes %}
+              <li class="note-item">
+                <div>
+                  <h3>{{ note.title }}</h3>
+                  <p>{{ note.content }}</p>
+                </div>
+                <div class="note-meta">
+                  {% if note.created_at %}
+                    <small>{{ note.created_at }}</small>
+                  {% endif %}
+                  <a href="{{ url_for('delete_note', note_id=note.id) }}" class="delete-link">Delete</a>
+                </div>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <div class="empty-state">
+            <p>No notes yet. Add your first note to get started.</p>
+          </div>
+        {% endif %}
+      </section>
+    </main>
+  </div>
+</body>
+</html>
