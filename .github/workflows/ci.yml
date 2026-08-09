@@ -15,3 +15,11 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t notes-app .
+      
+      - name: Run Docker container
+        run: docker run -d -p 5000:5000 --name notes-app-container notes-app
+
+      - name: Smoke test
+        run: |
+          sleep 5
+          curl --fail http://localhost:5000
